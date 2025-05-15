@@ -1,3 +1,6 @@
+
+*.html
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,r
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,r
 
@@ -89,3 +92,5 @@ rsconnect/
 /*_files/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,r
+
+

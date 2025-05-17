@@ -2,7 +2,8 @@
 title: LLMs for Preparing Data in R
 author: Cynthia A. Huang
 date: today
-toc: true
+bibliography: references.bib
+## toc: true
 format:
   presentation-revealjs+letterbox:
     slide-number: true
@@ -16,7 +17,7 @@ library(dplyr)
 ```
 
 # Introduction
-
+<!-- 
 ## Today's lecture
 
 ::: callout-note
@@ -33,115 +34,220 @@ library(dplyr)
 
 * Learn how to generate R code via LLM chat interfaces
 * See how to interact with LLMs from within R using the ellmer package
-:::
+::: -->
 
-<!-- ## Learning goals
+## Lecture outline
+
+- About Me!
+- About LLMs
+- Using LLMs for "Wild Caught Data" tasks
+- Using LLMs for WCD tasks in R with `{ellmer}`
+
+## Learning goals
 
 - develop your understanding of:
-    - how LLMs work,
-    - strengths and limitations of LLMs for different (data) tasks
-    - how to evaluate the performance on an LLM
-    - how to interact with LLMs in R -->
+    - what LLMs are,
+    - different types of "wild caught data" tasks that LLMs can help with,
+    - how to use and check LLMs for specific data prepration tasks,
+    - how to interact with LLMs in R using {ellmer}
 
-<!-- ## Lecture structure
+# About Me!
 
-- About Me
-- Some relevant background on LLMs
-- Thinking about how to use LLMs for "wild caught data" tasks
-- {ellmer} demo -->
-
-## About Me!
+## Who am I?
 
 ::: fragment
-- 👩‍🎓 Research Fellow supervised by:
-  - [_Prof. Rob Hyndman_](https://robjhyndman.com), NUMBATs, Econometrics & Business Statistics
+- 👩‍🎓 Research Fellow in EBS supervised by [_Prof. Rob Hyndman_](https://robjhyndman.com)
+- 🎙️ Regular host on [The Random Sample](https://www.therandomsample.com.au/podcasts/) podcast
+- 👩🏻‍🏫 Ex-Tutor for Wild Caught Data (2020)
 :::
 ::: fragment
-- 👩‍🎓 Thesis: **Unified Statistical Principles and Computational Tools for Data Harmonisation and Provenance**, with co-supervisors:
-  - [_A.Prof Simon Angus_](https://research.monash.edu/en/persons/simon-angus), SoDa Laboratories, Economics
-  - [_Dr. Sarah Goodwin_](https://research.monash.edu/en/persons/sarah-goodwin), EmVis group, Human Centered Computing
+- 💱 Previously:
+  - Economics at the University of Melbourne
+  - Catching wild data for empirical researchers:
+      - wikipedia entries, archival magazines, trade databases, satellite images, online retail prices...
 ::: 
 
-## About Me!
+## What do I work on?
 
 ::: incremental
-- 💱 Previously: 
-  - Economics at the University of Melbourne
-  - Data collection & curation for empirical economists
+- 👩‍🎓 Thesis: **Unified Statistical Principles and Computational Tools for Data Harmonisation and Provenance**, supervised by:
+  - [_Prof. Rob Hyndman_ (EBS, MBUS)](https://robjhyndman.com), [_Prof. Simon Angus_ (Econ, MBUS)](https://research.monash.edu/en/persons/simon-angus), and [_Dr. Sarah Goodwin_ (HCC, FIT)](https://research.monash.edu/en/persons/sarah-goodwin) 
 :::
 ::: incremental
 - 📊 Research Interests
-  - 🌰 
-  - 🤖 Leveraging LLMs and genAI in data wrangling and preparation
-  - 🖇️ Currently supervising a MBAT research internship on using LLMs to correct manual data entry errors.
+  - 🌰 Designing tools and workflows for wild caught data!
+  - 🤖 Leveraging LLMs and genAI for data wrangling and cleaning
+    - 🖇️ using LLMs to correct manual data entry errors -- Current MBAT research internship!
 :::
 
-# Under the hood of LLMs
+# About Large Language Models
 
-## What are LLMs anyway?
+## Generative AI and LLMs
 
+::: {.columns}
+::: {.column}
+According to Claude 3.7 Sonnet, *Generative AI* refers to:
+
+- computer algorithms and systems
+- that can generate content such as text, images and sound
+- based on patterns learnt from existing data
+
+<!-- Today, we will focus on *text* generation using Large Language Models (LLMs). -->
+:::
+::: {.column .fragment}
+![](images/illustrations/wcd-guest-lecture/genAI-llm-tree.png)
+:::
+:::
+
+## What are Large Language Models?
+
+::: {.columns}
+::: {.column}
 LLMs are...
 
-- lossy jpegs
+::: incremental
 - code writers?
 - encyclopedias?
 - assignment help?
-- multi-purpose tools!
+- translators?
+:::
+::: {.fragment}
+We often understand tools by what they can do for us, not how they work.
+:::
+:::
+::: {.column .fragment}
+![](images/illustrations/wcd-guest-lecture/dishwasher-01-closed.png){fig-align="center" height=500px}
+<!--- what does a dishwasher DO? vs. How does a dishwasher WORK? --->
+:::
+:::
 
-How your washing machine was built? vs. What your washing machine can do?
+<!-- LLMs are...
 
-## Types of Models
+::: incremental
+- code writers?
+- encyclopedias?
+- assignment help?
+- translators? -->
 
-- general knowledge vs. domain-specific (medical, )
-- general purpose vs. task-specific (reasoning, conversation)
+## Who makes LLMs?
 
-[🔗 Beyond ChatGPT: THE RAPIDLY EVOLVING LANDSCAPE OF AI](https://www.therandomsample.com.au/podcast/beyond-chatgpt-ai-landscape/)
+**LLM providers** develop and offer access to large language models and systems
 
-## Training vs. Prompting
+![](assets/llm-providers-googlesearch.png)
 
-<!--- image: data in, questions in and answers out -->
+[Today, we will see demos of _Anthropic_ and _OpenAI_ models.]{.fragment}
 
-Similar to you learning content during semester, 
+## Why are there so many different models?
 
-## Directly generating data with LLMs
+::: {.columns}
+::: {.column}
+LLM providers offer paid and free access to multiple models:
 
-When might we want to generate data?
-- mock data for ggtilecal
+- **OpenAI**: [GPT-3 and 4, o-series](https://platform.openai.com/docs/models/compare), 
+- **Anthroptic**: [Claude Haiku, Sonnet and Opus](https://docs.anthropic.com/en/docs/about-claude/models/overview)
+- **Google**: [Gemini Flash and Pro](https://cloud.google.com/vertex-ai/generative-ai/docs/models)
+- **Meta**: [Llama 3, Llama 4](https://www.llama.com/docs/model-cards-and-prompt-formats/)
+- **Alibaba**: [Gwen 2.5, 3, Max, Plus and Turbo](https://www.alibabacloud.com/en/solutions/generative-ai/qwen?_p_lc=1--------)
 
+:::
+::: {.column}
 
+[Different models are designed to be good at different things:]{.fragment}
 
-<!-- useful in making R packages -- also in Advanced R Programming (debugging assignment) -->
+::: incremental
 
-## Citing and documenting generated data
-
-<!--- blog post --->
-
-## Breakout Session
-
-::: {.callout-note style="width: 75%; margin: 0 auto;"}
-## Try it yourself time
-
-- Try this thing 
-
-- Also try this thing 
-
-- Feeling adventurous do this
+- chain-of-thought reasoning vs. instruction following
+- multimodal support: images, audio, video AND text
+- multilingual processng: translation, content generation
+- specific domains: medicine, finance, legal
 
 :::
 
-# What data preparation tasks might we want to use LLMs for?
 
-## Wild Caught Data tasks
+<!-- Multiple models and capabilities can be used together
 
-What tasks are involved in turning Wild Caught Data into analysis-ready data?
+![](assets/openAI-cookbook.png) -->
 
-- obtaining data
+:::
+:::
+
+
+## Model differentiation
+
+Learn more:
+
+- [📖 OpenAI Model Selection Guide](https://cookbook.openai.com/examples/partners/model_selection_guide/model_selection_guide)
+- [🎙️ Beyond ChatGPT: THE RAPIDLY EVOLVING LANDSCAPE OF AI](https://www.therandomsample.com.au/podcast/beyond-chatgpt-ai-landscape/)
+- [📖 Anthropic Claude Model Comparison Table](https://docs.anthropic.com/en/docs/about-claude/models/overview#model-comparison-table)
+
+
+<!-- - domain-specific: biomedical ([bioBERT](https://academic.oup.com/bioinformatics/article/36/4/1234/5566506)), finance, legal, scientific)
+- task-specific (summarisation, question-answering, content creation)
+- multimodal models (text and images - incl. video)
+- multilingual -->
+
+## How can we interact with LLMs?
+
+<!--- TODO: re-export image -->
+
+![](images/illustrations/wcd-guest-lecture/interfaces-to-llms_wide.png)
+
+[Today, we will try data preparation tasks using the both interfaces.]{.fragment}
+
+## How do we verify what LLMs are doing?
+
+::: {.columns}
+::: {.column}
+
+For a dishwasher, we consider:
+
+::: {.incremental}
+- **...are the dishes clean?**
+- **is there any dirt on the dishes?**
+:::
+
+[For LLMs...?]{.fragment}
+
+[It depends on the (data) task!]{.fragment}
+
+:::
+::: {.column .fragment}
+![](images/illustrations/wcd-guest-lecture/dishwasher-02-opened.png){fig-align="centre" height=500px}
+:::
+:::
+
+# Using LLMs for "Wild Caught Data" Tasks
+
+## What are common WCD tasks?
+
+::: {.columns}
+::: {.column}
+![](images/illustrations/wcd-guest-lecture/LLM-to-helpers_narrow.png){fig-align="centre" height=550px}
+:::
+::: {.column}
+
+::: callout-note
+## Discuss in groups [5 mins]
+
+- What tasks are involved in preparing Wild Caught Data for analysis? _List at least 3._
+- Which of these might be more or less suitable for addressing with LLMs?
+- What would you think about when writing prompts (i.e. chatting with an LLM) for these tasks? 
+:::
+
+:::
+:::
+
+
+
+<!-- What tasks are involved in turning Wild Caught Data into analysis-ready data? -->
+
+<!-- - obtaining data
 - combining data
 - **cleaning data**
     - missing data
     - 
 
-Which of these might be more or less suitable for addressing with LLMs? How could we use LLMs for each task?
+How could we use LLMs for each task? -->
 
 ## Ways to use LLMs for Wild Caught Data tasks
 
@@ -156,13 +262,43 @@ Which of these might be more or less suitable for addressing with LLMs? How coul
 
 insert mistake -->
 
+## Live Demo (OpenAI - Chat GPT)
+
+- famous person
+
+## Live Demo (ChatGPT)
+
+- numbats example: https://chatgpt.com/share/68283dc2-a164-8000-9587-40ebd232545e
+
+## LLM Tool Usage ()
+
+This works because of tool usage...
+<!--- Let's turn off Tool Usage -->
+
+## Live Demo (Claude 3.7 Sonnet with/without Web Search)
+
+- point out interface differs (working version)
+- now let's turn off (tool)
+
+
 # LLMs as a DIRECT data cleaning tool
+
+## TASK: what are some issues you've encountered with wild caught datasets???
+
+## Wild Caught Dataset Issues
+
+- factual look up (nationalities),
+- missing data (volume) -- talk about prompts & context,
+- inconsistencies (country codes, ST, st street),
+- harmonisation/matching (occupation-- are these two the same?)),
+- text summary/extraction (sentiment)
 
 ## Data 
 
 Example 1:
 Example 2:
 Example 3:
+
 
 ## Verifying correctness
 
@@ -186,7 +322,7 @@ Assuming we don't know how LLMs work, just like we can't read other people's min
 LLMs are trained on 'wild caught data' -- 
 How do you think the data that LLMs are trained on affects their performance?
 
-## Breakout Session
+## How would you verify that the LLM is returning valid output reliably?
 
 ::: {.callout-note style="width: 75%; margin: 0 auto;"}
 ## Try it yourself time
@@ -198,6 +334,14 @@ How do you think the data that LLMs are trained on affects their performance?
 - Feeling adventurous do this
 
 :::
+
+## Reliable LLM Agents
+
+- Agentic models are ...
+- Tool calling and modularisation
+- Structured output modes
+
+
 
 
 # Beyond chatting with LLMs
@@ -227,11 +371,28 @@ Requirements:
 $livechat()
 $chat()
 
+## Why bother with programmatic interface?
+
+- scale
+- reproducibility
+- build your own chatbot
+
+Demo:
+
+1. system prompts
+
+## Live Demo (system prompts)
+
+## What else? -- data extraction/cleaning
+
+2. entity recognition -- $extract_data
+
 ## Constructing prompts from data with {ellmer}
 
 Give data...
 
-## Saving responses as data with {ellmer}
+
+## Saving responses as data with {ellmer} / variables
 
 Receive and save data
 
@@ -245,6 +406,54 @@ Receive and save data
 
 <!--- introduce MBAT project --->
 
+# Citing GenAI & LLM usage
+
+## Monash Policy
+
+## Acknowledging generative AI
+
+I used AI in the following ways:
+(i) generate definitions and suggested explanations for key concepts covered in this lecture.
+
+(ii) generate text, rewrite, rephrase and/or paraphrase a portion of this assessment.
+I used Microsoft Word with copilot assisting to prepare the essay drafts (4 iterations). I used GoodAI to help revise the introduction (3 iterations) and then ChatGPT3.5 (2 iterations) to make the introduction sound more academic. I further edited the introduction adding appropriate citations.
+(iii) generate some other aspect of the submitted assessment. 
+I tried Microsoft Excel with copilot assisting to make the graphs but found GraphMaker (https://www.graphmaker.ai/) to produce better results for creating the graphs used as evidence in the essay. I used ChatGPT3.5 to change the bibliographic references into notes form for use in the footnotes.
+
+## Ethical concerns
+
+- copyright
+- celebritry likeness
+- deepfakes
+- environmental
+- find some good articles on this
+
+## Future of LLMs
+
+- MCP -- supercharge tool development [read more](https://www.descope.com/learn/post/mcp)
+- programming in natural language?
+- broader LLM landscape -- differentiation and tools [xxx](https://cobusgreyling.medium.com/the-language-model-landscape-is-being-disrupted-again-e6e992c57f8e)
+- translation
+- evaluation** -- safety & bias
+
+## Key takeaways
+
+There are many LLM models and systems which:
+
+- generate text outputs: code and 'data'
+- call tools to get more (text) input
+- have different types of user interfaces: chat vs. programmatic
+
+When using LLMs for preparing data, think about:
+
+- Breaking your larger, overall data preparation goal into *specific* tasks?
+- Positive and negative verification of the LLM's performance on your task! 
+
+*specific* tasks you're interested in achieving?
+
+
+
+<!--- Model context protocol -->
 
 
 ## Summary
@@ -262,3 +471,38 @@ Receive and save data
 
 :::
 
+
+# ARCHIVE
+
+## Training vs. Prompting
+
+<!--- image: data in, questions in and answers out -->
+
+Similar to you learning content during semester, 
+
+## Directly generating data with LLMs
+
+When might we want to generate data?
+- mock data for ggtilecal
+
+<!-- useful in making R packages -- also in Advanced R Programming (debugging assignment) -->
+
+## Citing and documenting generated data
+
+<!--- blog post --->
+
+## Broader landscape: models, interfaces & applications
+
+![](assets/language-model-landscape-v8_cobus-greyling.webp)
+
+<https://cobusgreyling.medium.com/the-language-model-landscape-is-being-disrupted-again-e6e992c57f8e>
+
+
+## Differentiation in Models
+
+- domain-specific: biomedical ([bioBERT](https://academic.oup.com/bioinformatics/article/36/4/1234/5566506)), finance, legal, scientific)
+- task-specific (summarisation, question-answering, content creation)
+- multimodal models (text and images - incl. video)
+- multilingual
+
+- [🔗 Beyond ChatGPT: THE RAPIDLY EVOLVING LANDSCAPE OF AI](https://www.therandomsample.com.au/podcast/beyond-chatgpt-ai-landscape/)

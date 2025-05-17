@@ -1,0 +1,4 @@
+- source: slides.qmd
+  quarto-pub:
+    - id: d3920e0d-4eed-4755-932d-aab8c771787c
+      url: https://cynthiahqy.quarto.pub/wcd2025_w11

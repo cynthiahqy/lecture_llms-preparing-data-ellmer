@@ -190,9 +190,71 @@ Learn more:
 
 <!--- TODO: re-export image -->
 
-![](images/illustrations/wcd-guest-lecture/interfaces-to-llms_wide.png)
+::: {.columns}
+::: {.column width="35%"}
+![](images/illustrations/wcd-guest-lecture/openAI-anthropic-models.png)
+:::
+::: {.column width="65%"}
 
-[Today, we will try data preparation tasks using the both interfaces.]{.fragment}
+::: {.fragment}
+### 1. Web-based Chat Interface
+- [ChatGPT](https://chatgpt.com), [Claude AI](https://claude.ai/), [Qwen Chat](https://chat.qwen.ai)
+- offers additional formatting of outputs, access to tools, other 'quality of life' features
+:::
+
+::: {.fragment}
+### 2. Programmatic Interfaces
+- requires an API key
+- interact using code with an LLM from within an R session
+:::
+<!-- ### 3. Other interfaces
+- voice assistants
+- embedded LLMs (e.g. text completion in Gmail) -->
+
+:::
+:::
+
+
+## How can we interact with LLMs?
+
+<!--- TODO: re-export image -->
+
+::: {.columns}
+::: {.column width="35%"}
+![](images/illustrations/wcd-guest-lecture/openAI-anthropic-models.png)
+:::
+::: {.column width="65%"}
+### 1. Web-based Chat Interface
+### 2. Programmatic Access
+### 3. Other interfaces
+- mobile (chat) applications
+- voice assistants
+- embedded LLMs (e.g. suggestions in Gmail)
+
+<!-- [Today, we will use web-based chat via [chatgpt.com](https://chatgpt.com) and [claude.ai](https://claude.ai/), as well as programmatic access via [`{ellmer}`](https://ellmer.tidyverse.org)]{.fragment} -->
+
+:::
+:::
+
+## How can we interact with LLMs?
+
+<!--- TODO: re-export image -->
+
+::: {.columns}
+::: {.column width="35%"}
+![](images/illustrations/wcd-guest-lecture/openAI-anthropic-models.png)
+:::
+::: {.column width="65%"}
+### 1. Web-based Chat Interface
+### 2. Programmatic Access
+### 3. Other interfaces
+
+Today, we will use web-based chat via [chatgpt.com](https://chatgpt.com) and [claude.ai](https://claude.ai/), as well as programmatic access via [`{ellmer}`](https://ellmer.tidyverse.org)
+
+:::
+:::
+
+<!-- [Today, we will try data preparation tasks using the both interfaces.]{.fragment} -->
 
 ## How do we verify what LLMs are doing?
 

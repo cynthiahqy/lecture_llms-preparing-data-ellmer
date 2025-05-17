@@ -1,0 +1,153 @@
+# ARCHIVE
+## Ethical concerns
+
+- copyright
+- celebritry likeness
+- deepfakes
+- environmental
+- find some good articles on this
+
+## Future of LLMs
+
+- MCP -- supercharge tool development [read more](https://www.descope.com/learn/post/mcp)
+- programming in natural language?
+- broader LLM landscape -- differentiation and tools [xxx](https://cobusgreyling.medium.com/the-language-model-landscape-is-being-disrupted-again-e6e992c57f8e)
+- translation
+- evaluation** -- safety & bias
+
+## Training vs. Prompting
+
+<!--- image: data in, questions in and answers out -->
+
+Similar to you learning content during semester, 
+
+## Directly generating data with LLMs
+
+When might we want to generate data?
+- mock data for ggtilecal
+
+<!-- useful in making R packages -- also in Advanced R Programming (debugging assignment) -->
+
+## Citing and documenting generated data
+
+<!--- blog post --->
+
+## Broader landscape: models, interfaces & applications
+
+![](assets/language-model-landscape-v8_cobus-greyling.webp)
+
+<https://cobusgreyling.medium.com/the-language-model-landscape-is-being-disrupted-again-e6e992c57f8e>
+
+
+## Differentiation in Models
+
+- domain-specific: biomedical ([bioBERT](https://academic.oup.com/bioinformatics/article/36/4/1234/5566506)), finance, legal, scientific)
+- task-specific (summarisation, question-answering, content creation)
+- multimodal models (text and images - incl. video)
+- multilingual
+
+- [🔗 Beyond ChatGPT: THE RAPIDLY EVOLVING LANDSCAPE OF AI](https://www.therandomsample.com.au/podcast/beyond-chatgpt-ai-landscape/)
+
+# LLMs as a DIRECT data cleaning tool
+
+## TASK: what are some issues you've encountered with wild caught datasets???
+
+## Wild Caught Dataset Issues
+
+- factual look up (nationalities),
+- missing data (volume) -- talk about prompts & context,
+- inconsistencies (country codes, ST, st street),
+- harmonisation/matching (occupation-- are these two the same?)),
+- text summary/extraction (sentiment)
+
+## Data 
+
+Example 1:
+Example 2:
+Example 3:
+
+## How would you verify that the LLM is returning valid output reliably?
+
+::: {.callout-note style="width: 75%; margin: 0 auto;"}
+## Try it yourself time
+
+- Try this thing 
+
+- Also try this thing 
+
+- Feeling adventurous do this
+
+:::
+
+
+
+## Reliable LLM Agents
+
+- Agentic models are ...
+- Tool calling and modularisation
+- Structured output modes
+
+# Tasks
+
+## Evaluating prompts along with output
+
+Haley has encountered some missing data in the age column of her wild caught census data, and she tries using ChatGPT to fix the issue:
+
+- [Chat 1](https://chatgpt.com/share/6828c268-85e0-8000-91ef-ceb73ed32d6c)
+- [Chat 2](https://chatgpt.com/share/6828c2ee-a3b0-8000-a956-692974053b43)
+
+<!-- - [Chat 1](https://chatgpt.com/share/6828c13e-191c-8000-8b3f-0a422a2e1dd0) -->
+
+::: callout-note
+## Discuss in groups [10 mins]
+
+Examine the two chats:
+
+- do they return the same data?
+- which answer seems more reliable?
+- is any important information missing from the chat?
+- would you recommend that Haley use the LLM generated data in an analysis of trends in the average age of different suburbs?
+- does your recommendation depend on the type of analysis?
+
+<!-- - What would you think about when writing prompts (i.e. chatting with an LLM) for these tasks?  -->
+:::
+
+## Verifying task success
+
+::: {.columns}
+::: {.column}
+Data preparation tasks:
+
+- **looking up missing information**
+- **suggesting values**
+- **harmonise different abbreviations**
+- **comparing and categorising**
+- **summarising text**
+- **extracting information**
+:::
+::: {.column}
+::: {.callout-note}
+
+## Discuss in groups [10 min]
+
+- Which of these tasks would you feel most confident using an LLM to complete? Why?
+- Which of these tasks would you prefer to have a human complete? Why?
+- Which of these tasks would be most difficult to verify the correctness of?
+- How would your answers change depending on the type of data?
+
+:::
+:::
+:::
+
+
+## Constructing prompts from data with {ellmer}
+
+Give data...
+
+## What else? -- data extraction/cleaning
+
+2. entity recognition -- $extract_data
+
+## Saving responses as data with {ellmer} / variables
+
+Receive and save data

@@ -36,13 +36,6 @@ library(dplyr)
 * See how to interact with LLMs from within R using the ellmer package
 ::: -->
 
-## Lecture outline
-
-- About Me!
-- About LLMs
-- Using LLMs for "Wild Caught Data" tasks
-- Using LLMs for WCD tasks in R with `{ellmer}`
-
 ## Learning goals
 
 - develop your understanding of:
@@ -50,6 +43,22 @@ library(dplyr)
     - different types of "wild caught data" tasks that LLMs can help with,
     - how to use and check LLMs for specific data prepration tasks,
     - how to interact with LLMs in R using {ellmer}
+
+## Lecture outline
+
+::: {.columns}
+::: {.column width=35%}
+![](images/illustrations/wcd-guest-lecture/openAI-anthropic-models.png){height=500px}
+:::
+::: {.column width=65%}
+- About Me!
+- About LLMs
+- Using LLMs for "Wild Caught Data" tasks
+- Using LLMs in R with `{ellmer}`
+:::
+:::
+
+
 
 # About Me!
 
@@ -86,7 +95,7 @@ library(dplyr)
 
 ::: {.columns}
 ::: {.column}
-According to Claude 3.7 Sonnet, *Generative AI* refers to:
+*Generative AI* refers to:
 
 - computer algorithms and systems
 - that can generate content such as text, images and sound
@@ -174,7 +183,7 @@ LLM providers offer paid and free access to multiple models:
 
 ## Model differentiation
 
-Learn more:
+Learn more about picking the right tool:
 
 - [📖 OpenAI Model Selection Guide](https://cookbook.openai.com/examples/partners/model_selection_guide/model_selection_guide)
 - [🎙️ Beyond ChatGPT: THE RAPIDLY EVOLVING LANDSCAPE OF AI](https://www.therandomsample.com.au/podcast/beyond-chatgpt-ai-landscape/)
@@ -249,7 +258,14 @@ Learn more:
 ### 2. Programmatic Access
 ### 3. Other interfaces
 
-Today, we will use web-based chat via [chatgpt.com](https://chatgpt.com) and [claude.ai](https://claude.ai/), as well as programmatic access via [`{ellmer}`](https://ellmer.tidyverse.org)
+Today, we will use web-based chat via:
+
+- [chatgpt.com](https://chatgpt.com)
+- [claude.ai](https://claude.ai/), 
+
+as well as programmatic access via: 
+
+- [`{ellmer}`](https://ellmer.tidyverse.org)
 
 :::
 :::
@@ -263,7 +279,7 @@ Today, we will use web-based chat via [chatgpt.com](https://chatgpt.com) and [cl
 
 For a dishwasher, we consider:
 
-::: {.incremental}
+::: {.incremental fragment-index=1}
 - **...are the dishes clean?**
 - **is there any dirt on the dishes?**
 :::
@@ -273,7 +289,7 @@ For a dishwasher, we consider:
 [It depends on the (data) task!]{.fragment}
 
 :::
-::: {.column .fragment}
+::: {.column .fragment fragment-index=2}
 ![](images/illustrations/wcd-guest-lecture/dishwasher-02-opened.png){fig-align="centre" height=500px}
 :::
 :::
@@ -292,14 +308,12 @@ For a dishwasher, we consider:
 ## Discuss in groups [5 mins]
 
 - What tasks are involved in preparing Wild Caught Data for analysis? _List at least 3._
-- Which of these might be more or less suitable for addressing with LLMs?
-- What would you think about when writing prompts (i.e. chatting with an LLM) for these tasks? 
+- Which of these might be more or less suitable for addressing with LLMs? Why?
+<!-- - What would you think about when writing prompts (i.e. chatting with an LLM) for these tasks?  -->
 :::
 
 :::
 :::
-
-
 
 <!-- What tasks are involved in turning Wild Caught Data into analysis-ready data? -->
 
@@ -311,260 +325,344 @@ For a dishwasher, we consider:
 
 How could we use LLMs for each task? -->
 
-## Ways to use LLMs for Wild Caught Data tasks
+## Using LLMs for Data Preparation Tasks
 
-1. code generation --> execute on your data
-2. data generation --> directly modify or augment your data
+::: {.fragment}
+### 1. Generating data wranging **code**
+  - 'indirect' use of LLMs to clean data
+:::
 
-- obtaining data:
-- combining data:
-- cleaning data:
+::: {.fragment}
+### 2. Transformating and generating **new data**
+  - creating example datasets (e.g. when documenting a custom R function)
+  - changing data between formats (csv to json)
+:::
 
-<!-- ## Tool-User Beware!
+## Using LLMs for Data Preparation Tasks
 
-insert mistake -->
+### 1. Generating data wranging **code**
 
-## Live Demo (OpenAI - Chat GPT)
+### 2. Transformating and generating **new data**
 
-- famous person
+::: {.fragment}
+### 3. Modifying and augmenting **existing data**
+  - filling in missing data
+  - correct typos or inconsistencies
+  - creating new columns based on existing ones
+:::
 
-## Live Demo (ChatGPT)
+## Modifying and augmenting data
 
-- numbats example: https://chatgpt.com/share/68283dc2-a164-8000-9587-40ebd232545e
+::: {.columns}
+::: {.column}
 
-## LLM Tool Usage ()
+::: {.incremental}
+- filling in missing data
+  - **'look up' facts:** author nationality: `Jane Austen`
+  - **suggesting values:** missing volume units for drinks: `300?`
+- correct typos or inconsistencies
+  - **harmonise different abbreviations:** `{Victoria, VIC, Vic}` --> `{VIC}`
+:::
 
-This works because of tool usage...
-<!--- Let's turn off Tool Usage -->
+:::
+::: {.column}
 
-## Live Demo (Claude 3.7 Sonnet with/without Web Search)
+::: {.incremental}
+- creating new columns based on existing ones
+  - **comparison and categorisation:** are `teachers` and `instructors` similar occupations?
+  - **summarise text:** key points in free-form survey responses
+  - **extract info**: name of the movie in a film review
+:::
 
-- point out interface differs (working version)
-- now let's turn off (tool)
+:::
+:::
+
+## Prompts for Data Preparation Tasks
+
+::: {.columns}
+::: {.column .incremental}
+- prompts need to include:
+  - instruction and data!
+- responses would ideally:
+  - return data of the expected type
+  - and in a easy to import format
+:::
+::: {.column .fragment}
+::: {.callout-note}
+## Try yourself! [10mins]
+
+1. Pick a starting prompt from the next page
+2. Fill in the necessary data.
+3. Try the prompt in your choice of LLM chat (e.g. ChatGPT, Qwen Chat, Claude AI etc.). 
+    - What output did you get in return?
+    - Could you import it into R easily?
+4. Modify the prompt to return the answer in a more useful format.
+
+:::
+:::
+:::
 
 
-# LLMs as a DIRECT data cleaning tool
 
-## TASK: what are some issues you've encountered with wild caught datasets???
+## Starting Prompts
 
-## Wild Caught Dataset Issues
+- **'look up' facts:** "What nationality is _the author_ `<author name>`?"
+- **suggesting values:** "What is the likely volume unit _of a beverage `<can>` of with_ a volume of `<300>`?"
+- **harmonise different abbreviations:** "Convert the following list of Australian states to all use three-letter state codes: `<list>`" <!-- [example chat](https://chatgpt.com/share/6828bf20-3600-8000-b26d-830a9fde7728) -->
+- **comparison:** "How similar are these two occupations: `<occupation A>`, `<occupation B>`?"
+- **summary:** "Summarise the following survey response: `<text>`"
+- **extraction**: "What movie is the follow review about": `<review text>`
 
-- factual look up (nationalities),
-- missing data (volume) -- talk about prompts & context,
-- inconsistencies (country codes, ST, st street),
-- harmonisation/matching (occupation-- are these two the same?)),
-- text summary/extraction (sentiment)
+## Verifying success
 
-## Data 
+::: {.columns}
+::: {.column}
 
-Example 1:
-Example 2:
-Example 3:
+**Verification** is the most important skill when using LLMs, but it requires:
 
+* Clearly defined tasks and expected outcomes
+* Ways of checking the outcomes have been achieved
 
-## Verifying correctness
+:::
+::: {.column}
+![](images/illustrations/wcd-guest-lecture/dishwasher-03-clean.png)
+:::
+:::
 
-The most important skill to develop when using LLMs is verification skills. 
+::: notes
+How can we check if the LLM output is accurate or valid?
+
+First, you need to understand and define the task.
+
+Next, consider **How would you check if a human completed this task correctly?**
+
+One of the most important skills to develop when using LLMs is **verification**. 
+
 But 'how' to verify an LLM output is not always clear.
-How do you check if an LLM output matches your needs?
-
-<!--- Let's think about how to verify  --->
-
-## Verifying data outputs
-
-Assuming we don't know how LLMs work, just like we can't read other people's minds, how might we check if an LLM is doing the 'right thing'?
-
-* Define characteristics of the 'right' output -- positive verification
-* Figure out signals or signs of 'wrong things' -- negative verification
+:::
 
 <!--- principle agent problem; management theory--> 
 
+## Back to washing the dishes
+
+::: {.columns}
+::: {.column}
+
+There are multiple ways to verify outcomes match expectations.
+
+::: {.incremental}
+* **Positive verification:** Define characteristics of 'success'
+* **Negative verification:** Figure out signals or signs of 'failure'
+* **Trust-based verification:** Seek assurance and confirmation of 'success'
+:::
+
+:::
+::: {.column}
+![](images/illustrations/wcd-guest-lecture/dishwasher-04-dirty.png)
+:::
+:::
+
 ## 'External Knowledge' in LLMs
 
-LLMs are trained on 'wild caught data' -- 
-How do you think the data that LLMs are trained on affects their performance?
+LLMs are trained on 'wild caught data' -- lots and lots of it.
 
-## How would you verify that the LLM is returning valid output reliably?
+::: {.incremental}
 
-::: {.callout-note style="width: 75%; margin: 0 auto;"}
-## Try it yourself time
-
-- Try this thing 
-
-- Also try this thing 
-
-- Feeling adventurous do this
+- How do you think the data that LLMs are trained on affects their performance?
+- Would you expect a model trained on data from Google platforms (e.g., Gmail, Youtube) to be good at coding?
 
 :::
 
-## Reliable LLM Agents
+[Let's look at example data generation task.]{.fragment}
 
-- Agentic models are ...
-- Tool calling and modularisation
-- Structured output modes
+## Looking up missing information
+
+<!-- Let's say we are interested in who teaches different subjects at Monash University. -->
+
+<!-- **[Prompt 1, ChatGPT (18/05/2025)](https://chatgpt.com/share/6828ce73-7d4c-8000-b0b6-ffb5978e9082):** Who are the instructors of Monash University's wild caught data course? [chatGPT](https://chatgpt.com/share/6828ce73-7d4c-8000-b0b6-ffb5978e9082) -->
 
 
+> Prompt: `Write a yaml dataset of the instructors of Monash University's wild caught data course`
 
+- [**Claude Haiku (18/05/2025)**](https://claude.ai/share/0265b829-2808-4508-804d-69f96df86698)
+- [**Claude Sonnet 3.7 (18/05/2025)**](https://claude.ai/share/a68bd764-8581-44fd-a105-58acf8fa1356)
+- [**ChatGPT (18/05/2025)**](https://chatgpt.com/share/68283dc2-a164-8000-9587-40ebd232545e)
 
-# Beyond chatting with LLMs
+What do we expect the LLM output to be? Do we have a reference information to compare against?
+
+## LLM Tool Usage
+
+::: {layout-ncol="2"}
+
+![](assets/claude-tool-settings.png)
+
+![](assets/chatgpt-tool-use.png)
+
+:::
+
+# Using LLMs in R with {ellmer}
 
 <!---image: web interface vs. API -->
 
-## Ways to interact with LLMs
+## Beyond web-based interfaces
 
-- web-interface + copy/paste
-- programmatically = code and variables
+Different interfaces mean different data preparation workflows:
+
+- LLM web-interface = copy/paste
+- programmatic interfaces = code and variables
+
+::: incremental:::
 
 Using the {ellmer} R package we can:
 
-- connect to an LLM
 - send prompts to that LLM from an R session
-- assign output from the LLM to variables
+- construct prompts from with imported data
+- systematically docutest different prompts BEFORE scaling up
+- manipulate response content using code
+:::
 
 ## Setting up {ellmer}
 
 Requirements:
 
-- API key -- knock! knock! who's there? Cynthia's R session!
-- ellmer installed
+- Get an API key from the LLM provider you want to use
+  
+  > knock! knock! who's there? Cynthia's R session!
 
-## Live Demo
+- install ellmer
 
-$livechat()
-$chat()
+- store the API key where ellmer can find it
 
-## Why bother with programmatic interface?
+```r
+library(ellmer)
+
+chat <- chat_claude()
+```
+
+## Chatting via ellmer
+
+```r
+prompt <- "Write a yaml dataset of the instructors of Monash University's wild caught data course"
+
+chat$livechat()
+```
+
+<!-- ## Why bother with programmatic interface?
 
 - scale
 - reproducibility
-- build your own chatbot
+- build your own chatbot -->
 
-Demo:
+## Modifying the system prompt
 
-1. system prompts
+::: {.columns}
+::: {.column}
+A **system prompt** is the behind-the-scenes instruction manual that tells an AI assistant:
 
-## Live Demo (system prompts)
+- what tone to use,
+- what information the system can access,
+- and how to handle different types of questions or requests
+:::
+::: {.column}
+```r
+question <- "
+  How can I compute the mean and median of
+   variables a, b, c, and so on,
+   all the way up to z, 
+   grouped by age and sex.
+"
+chat <- chat_claude(system_prompt = "
+  You are an expert R programmer
+  who prefers the tidyverse.
+")
+chat$chat(question)
+```
 
-## What else? -- data extraction/cleaning
+Example from [ellmer docs](https://ellmer.tidyverse.org/articles/prompt-design.html)
+:::
+:::
 
-2. entity recognition -- $extract_data
+## Revisiting author nationality
 
-## Constructing prompts from data with {ellmer}
+```{r}
+author_df <- readr::read_csv('example_data/week10-author_df.csv')
 
-Give data...
+missing_nat <- author_df |> 
+  dplyr::mutate(nationality = na_if(nationality, "No nationality matched")) |> 
+  dplyr::filter(is.na(nationality))
 
+missing_nat
 
-## Saving responses as data with {ellmer} / variables
+```
 
-Receive and save data
+##  Revisiting author nationality
 
-## Scaling up to an entire dataset!
+```r
+chat <- chat_openai()
+```
+
+## Evaluation through agreement
+
+Another way to verify is via **consensus**.
+
+In the author nationality example, we could compare nationality responses from different models.
+
+Would you trust the data more if you got all the same answers? or all different answers?
+
+<!--- try in Tutorial -->
+
+<!-- ## Scaling up to an entire dataset!
 
 - costs
 - columm by column
-- BREAK DOWN THE TASK!
+- BREAK DOWN THE TASK! -->
 
-## Evaluating performance?
+# Final Comments
 
-<!--- introduce MBAT project --->
+## Generative AI acknowledgement
 
-# Citing GenAI & LLM usage
+::: {.callout-important}
 
-## Monash Policy
-
-## Acknowledging generative AI
+##
 
 I used AI in the following ways:
-(i) generate definitions and suggested explanations for key concepts covered in this lecture.
 
-(ii) generate text, rewrite, rephrase and/or paraphrase a portion of this assessment.
-I used Microsoft Word with copilot assisting to prepare the essay drafts (4 iterations). I used GoodAI to help revise the introduction (3 iterations) and then ChatGPT3.5 (2 iterations) to make the introduction sound more academic. I further edited the introduction adding appropriate citations.
-(iii) generate some other aspect of the submitted assessment. 
-I tried Microsoft Excel with copilot assisting to make the graphs but found GraphMaker (https://www.graphmaker.ai/) to produce better results for creating the graphs used as evidence in the essay. I used ChatGPT3.5 to change the bibliographic references into notes form for use in the footnotes.
+(i) generate definitions and suggested explanations for key concepts covered in this lecture. I used Claude AI to suggest definitions for terms like 'Generative AI', and 'System Prompt', and to generate lists of "top LLM providers in 2025" and "ways of interacting with LLMs".
 
-## Ethical concerns
-
-- copyright
-- celebritry likeness
-- deepfakes
-- environmental
-- find some good articles on this
-
-## Future of LLMs
-
-- MCP -- supercharge tool development [read more](https://www.descope.com/learn/post/mcp)
-- programming in natural language?
-- broader LLM landscape -- differentiation and tools [xxx](https://cobusgreyling.medium.com/the-language-model-landscape-is-being-disrupted-again-e6e992c57f8e)
-- translation
-- evaluation** -- safety & bias
+:::
 
 ## Key takeaways
+
+::: {.fragment}
 
 There are many LLM models and systems which:
 
 - generate text outputs: code and 'data'
 - call tools to get more (text) input
-- have different types of user interfaces: chat vs. programmatic
+- are available via different types of user interfaces: chat vs. programmatic
 
+:::
+
+
+::: {.fragment}
 When using LLMs for preparing data, think about:
 
-- Breaking your larger, overall data preparation goal into *specific* tasks?
-- Positive and negative verification of the LLM's performance on your task! 
-
-*specific* tasks you're interested in achieving?
-
-
-
-<!--- Model context protocol -->
-
-
-## Summary
-
-:::callout-note
-## What we've learnt 
-
-:::incremental 
-- Learnt the basics of what LLMs can receive as inputs and generate as outputs
-- Explored different 'wild caught data' tasks that LLMs can be used for
-- Generated LLM outputs for these tasks including code and text data
-- Learnt how the package {ellmer} can be used to interact with LLMs from R
-- Discussed pitfalls to avoid when using LLMs for data cleaning
+- Breaking your larger, overall data preparation goal into *specific* tasks
+- Ways to verify the LLM's performance on your task
 :::
 
+## What we've learnt...
+
+::: {.columns}
+::: {.column}
+- basics of what LLMs can do, who provides them and what differentiates them
+- different 'wild caught data' tasks that LLMs can be used for
+- how to approach verifying LLM output for data preparation tasks
+- how to interact with LLMs from R using {ellmer}
+:::
+::: {.column}
+![](images/illustrations/wcd-guest-lecture/LLM-to-helpers_narrow.png){fig-align="centre" height=550px}
+:::
 :::
 
 
-# ARCHIVE
-
-## Training vs. Prompting
-
-<!--- image: data in, questions in and answers out -->
-
-Similar to you learning content during semester, 
-
-## Directly generating data with LLMs
-
-When might we want to generate data?
-- mock data for ggtilecal
-
-<!-- useful in making R packages -- also in Advanced R Programming (debugging assignment) -->
-
-## Citing and documenting generated data
-
-<!--- blog post --->
-
-## Broader landscape: models, interfaces & applications
-
-![](assets/language-model-landscape-v8_cobus-greyling.webp)
-
-<https://cobusgreyling.medium.com/the-language-model-landscape-is-being-disrupted-again-e6e992c57f8e>
-
-
-## Differentiation in Models
-
-- domain-specific: biomedical ([bioBERT](https://academic.oup.com/bioinformatics/article/36/4/1234/5566506)), finance, legal, scientific)
-- task-specific (summarisation, question-answering, content creation)
-- multimodal models (text and images - incl. video)
-- multilingual
-
-- [🔗 Beyond ChatGPT: THE RAPIDLY EVOLVING LANDSCAPE OF AI](https://www.therandomsample.com.au/podcast/beyond-chatgpt-ai-landscape/)

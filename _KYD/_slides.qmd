@@ -1,4 +1,33 @@
 # ARCHIVE
+
+## 'External Knowledge' in LLMs
+
+LLMs are trained on 'wild caught data' -- lots and lots of it.
+
+::: {.incremental}
+
+- How do you think the data that LLMs are trained on affects their performance?
+- Would you expect a model trained on data from Google platforms (e.g., Gmail, Youtube) to be good at coding?
+
+:::
+
+[Let's look at example data generation task.]{.fragment}
+
+## Looking up missing information
+
+<!-- Let's say we are interested in who teaches different subjects at Monash University. -->
+
+<!-- **[Prompt 1, ChatGPT (18/05/2025)](https://chatgpt.com/share/6828ce73-7d4c-8000-b0b6-ffb5978e9082):** Who are the instructors of Monash University's wild caught data course? [chatGPT](https://chatgpt.com/share/6828ce73-7d4c-8000-b0b6-ffb5978e9082) -->
+
+
+> Prompt: `Write a yaml dataset of the instructors of Monash University's wild caught data course`
+
+- [**Claude Haiku (18/05/2025)**](https://claude.ai/share/0265b829-2808-4508-804d-69f96df86698)
+- [**Claude Sonnet 3.7 (18/05/2025)**](https://claude.ai/share/a68bd764-8581-44fd-a105-58acf8fa1356)
+- [**ChatGPT (18/05/2025)**](https://chatgpt.com/share/68283dc2-a164-8000-9587-40ebd232545e)
+
+What do we expect the LLM output to be? Do we have a reference information to compare against?
+
 ## Ethical concerns
 
 - copyright

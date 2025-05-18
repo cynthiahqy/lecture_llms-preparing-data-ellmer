@@ -5,31 +5,49 @@ In this tutorial, you will practice:
 -   using LLMs via chat interface to generate datasets
 -   evaluating LLM generated data in R
 
-## Background 
-
-*Alone is an American survival competition series on History. It follows the self-documented daily struggles of 10 individuals (seven paired teams in season 4) as they survive alone in the wilderness for as long as possible using a limited amount of survival equipment. With the exception of medical check-ins, the participants are isolated from each other and all other humans. They may "tap out" at any time, or be removed due to failing a medical check-in. The contestant who remains the longest wins a grand prize of $500,000 (USD) (increasing to $1 million in season 7).*
-
-From [Alone wikipedia](https://en.wikipedia.org/wiki/Alone_(TV_series))
+Feel free to chat with an LLM as part of these exercises.
 
 ## Exercise 1
 
-Visit the wikipedia page for the Alone TV Series and identify the basic elements that make up the page. 
+Haley has encountered some missing data in the age column of her wild caught census data, and she tries using ChatGPT to fix the issue:
 
-a. How many tables are on there on the page?   
+- [Chat 1](https://chatgpt.com/share/6828c268-85e0-8000-91ef-ceb73ed32d6c)
+- [Chat 2](https://chatgpt.com/share/6828c2ee-a3b0-8000-a956-692974053b43)
 
-b. How many paragraphs are there? 
+Examine the two chats:
 
-c. Identify and scrape the table containing the past Series winners. 
-
-d. Identify and scrape the text that was used to create the Background text for this tutorial. 
+- do they return the same data?
+- which answer seems more reliable?
+- is any important information missing from the chat?
+- would you recommend that Haley use the LLM generated data in an analysis of trends in the average age of different suburbs?
+- does your recommendation depend on the type of analysis?
 
 ## Exercise 2
 
-Explore the data you've pulled down from the webpage. 
+Recall the data preparation tasks discussed in lecture
 
-a. Process the table and extract how long the winners spent in the Wild on each season.
+- **looking up missing information**
+- **suggesting values**
+- **harmonise different abbreviations**
+- **comparing and categorising**
+- **summarising text**
+- **extracting information**
 
-b. Plot your result. Is the time winners spent in the wild increasing as the seasons go on?
+Imagine you are working on a data analysis project where all of these tasks are required to prepare the analysis dataset. 
+
+Discuss in groups:
+
+- Which of these tasks would you feel most confident using an LLM to complete? Why?
+- Which of these tasks would you prefer to have a human complete? Why?
+- Which of these tasks would be most difficult to verify the correctness of?
+- How would your answers change depending on the type of dataset you are working with?
+
+## Exercise 3
+
+Import and examine the nationality columns in the author dataset `week11-author_df_llm.csv` in R.
+
+Subset the list of authors into groups based on how confidently you could answer what the author's nationality is. 
+[Hint: Consider creating a new column comparing the LLM nationalities with the web-scraped nationalities]
 
 
 #### Copyright Monash University

@@ -5,12 +5,10 @@ author: Cynthia A. Huang
 date: today
 bibliography: references.bib
 code-copy: true
+slide-number: true
 ## toc: true
 format:
-  presentation-revealjs+letterbox:
-    slide-number: true
-filters:
-  - include-code-files
+  presentation-revealjs+letterbox
 ---
 
 ```{r}
@@ -528,90 +526,210 @@ Using the {ellmer} R package we can:
 - manipulate response content using code
 :::
 
-## Setting up {ellmer}
+## Connecting {ellmer} to an LLM
 
-::: {.columns}
-::: {.column}
-Start by:
+The basic steps:
+
+::: {.incremental}
 
 - Installing [`{ellmer}`](https://ellmer.tidyverse.org/)
-
 - Getting an API key from the LLM provider you want to use
-  
   > knock! knock! who's there? Cynthia's R session!
-
 - Storing the API key where ellmer can find it
-
+- Starting a chat session using the relevant `ellmer::chat_*()`
 :::
-::: {.column}
-Then start chatting:
+
+[Today, we'll interact with the OpenAI API via [`ellmer::chat_openai()`](https://ellmer.tidyverse.org/reference/chat_openai.html)]{.fragment}
+
+## LIVE DEMO: Chatting via {ellmer}
+
+
+```r
+library(ellmer)
+## A session is like a chat conversation
+session <- chat_openai()
+
+question <- "
+  How can I pick a random letter from A-Z.
+"
+
+## send a question to the 'chat'
+session$chat(question)
+
+## clarify your request
+session$chat("Return R code only")
+
+## inspect all turns in the session so far
+session
+```
+
+[What if we *always* want the LLM to return R code?]{.fragment}
+
+
+## LIVE DEMO: System Prompts
+
 
 ```r
 library(ellmer)
 
-session <- chat_openai()
+session_tidy_expert <- chat_openai(system_prompt = "
+  You are an expert R programmer
+  who prefers the tidyverse.
+  Only return code without explanation.
+")
+
+session_tidy_expert$chat(question)
+
+session_tidy_expert
 ```
+_Example adapted from [ellmer docs](https://ellmer.tidyverse.org/articles/prompt-design.html)_
 
-[A **session** is a single conversation instance between a user and an LLM.]{.fragment}
 
+
+## Sessions and system prompts
+
+::: {.incremental}
+- A **chat session** is a single conversation instance between a user and an LLM
+- A **R session** is an active workspace where you're running the R programming language
+- A **system prompt** is the behind-the-scenes instruction manual that tells an AI assistant:
+  - what tone to use,
+  - what information the system can access,
+  - and how to handle different types of questions or requests
 :::
-:::
 
-## System Prompts
+## Revisiting Author Nationalities
 
-::: {.columns}
+:::: {.columns}
 ::: {.column}
-A **system prompt** is the behind-the-scenes instruction manual that tells an AI assistant:
 
-- what tone to use,
-- what information the system can access,
-- and how to handle different types of questions or requests
+[Could we use an LLM to extract Jane Austen's nationality?]{.fragment}
+
+![WCD 2025, S1, Week 10 - Slide 29](assets/jane-austen-screenshot-w10-slide29.png)
+
+
+
 :::
 ::: {.column}
 
-```{.r include="lecture_ellmer-demo.R"}
-```
-Example adapted from [ellmer docs](https://ellmer.tidyverse.org/articles/prompt-design.html)
+::: {.fragment}
+How can an LLM help with missing nationalities?
 :::
-:::
-
-## Revisiting author nationality
 
 ```{r}
-author_df <- readr::read_csv('example_data/week10-author_df.csv')
+#| echo: false
 
-missing_nat <- author_df |> 
-  dplyr::mutate(nationality = na_if(nationality, "No nationality matched"))# |> 
-  #dplyr::filter(is.na(nationality))
+author_df <- readr::read_csv('example_data/week10-author_df.csv') |>
+  dplyr::mutate(nationality = na_if(nationality, "No nationality matched"))
 
-missing_nat
+author_df |>
+  dplyr::filter(is.na(nationality))
 
 ```
 
-##  Revisiting author nationality
+:::
+::::
+
+
+## LIVE DEMO: Extract Nationalities
 
 ```r
-chat <- chat_openai()
+text <- "Jane Austen (/ˈɒstɪn, ˈɔːstɪn/ OST-in, AW-stin; 16 December 1775 – 18 July 1817) was an English novelist known primarily for her six novels, which implicitly interpret, critique, and comment on the English landed gentry at the end of the 18th century. Austen's plots often explore the dependence of women on marriage for the pursuit of favourable social standing and economic security. Her works are implicit critiques of the novels of sensibility of the second half of the 18th century and are part of the transition to 19th-century literary realism.[2][b] Her use of social commentary, realism, wit, and irony have earned her acclaim amongst critics and scholars.\n"
+
+session_read <- chat_openai(system_prompt = "You are a data entry assistant.")
+
+session_read <- chat_openai()
+
+nationality_prompt <- "Nationality of person"
+
+session_read$extract_data(text, type = type_string(description = nationality_prompt))
+
+std_prompt <- "Extract structured data of the nationality of person. Return only ISO 3-digit country code (e.g. GBR, USA)"
+
+session_read$extract_data(text, type = type_string(description = std_prompt))
+```
+
+[What if we don't have the extended text description available?]{.fragment}
+
+## LIVE DEMO: Ask for Nationalities
+
+```r
+library(dplyr)
+
+author_df <- readr::read_csv('example_data/week10-author_df.csv')
+
+short_prompt <- "Nationality of person only"
+session_lib <- chat_openai(system_prompt = "You are a librarian with expert knowledge of popular authors.")
+
+## let's ask about multiple authors
+author_df |>
+  tail(6) |>
+  rowwise() |>
+  mutate(nationality_llm = 
+          session_lib$clone()$extract_data(author_name,
+                                                  type = type_string(short_prompt))
+    )
 ```
 
 ## Evaluation through agreement
 
-Another way to verify is via **consensus**.
+Another way to verify data quality is via **consensus**.
 
-In the author nationality example, we could compare nationality responses from different models.
+::: {.fragment}
+Here are nationalities returned by OpenAI's gpt-4o model on 18/05/2025:
 
-Would you trust the data more if you got all the same answers? or all different answers?
+```{r}
+readr::read_csv("example_data/week11-author_df_llm_na-if.csv") |> filter(nationality_llm != nationality) |> select(-author_links) |> head(6)
+```
+:::
+
+[How could you use this information to assess your data quality?]{.fragment}
+
+## How much do LLMs 'know'?
+
+::: {.fragment}
+What happens if we ask about less widely-known people?
+
+```r
+session <- chat_openai()
+session$chat("List the instructors of Monash University's wild caught data course.")
+```
+:::
+
+::: {.fragment}
+Let's try again via the [ChatGPT web interface](https://chatgpt.com)
+
+```{.r code-line-numbers=false}
+"List the instructors of Monash University's wild caught data course."
+```
+:::
+
+::: {.fragment}
+Why do you think ChatGPT able to answer this request via the web interface in this [demo chat?](https://chatgpt.com/share/6829d5e8-ec84-8000-843e-b51aa14cca3d)
+:::
 
 
-## LLM Agents
+## LLM agents, web search and more
 
-::: {layout-ncol="2"}
+:::: {.columns}
+::: {.column}
 
-![](assets/claude-tool-settings.png)
+::: {.fragment .incremental}
+LLMs can be integrated with additional capabilities such as:
 
-![](assets/chatgpt-tool-use.png)
+  - search
+  - image generation
+  - gmail, gdrive and gcal search (e.g. in Claude AI)
+:::
+
+[How do you think the ability to search affects verifying task success?]{.fragment}
 
 :::
+::: {.column}
+![](assets/chatgpt-tool-use.png)
+:::
+::::
+
+
 
 <!--- try in Tutorial -->
 
@@ -623,17 +741,16 @@ Would you trust the data more if you got all the same answers? or all different 
 
 # Final Comments
 
-## Generative AI acknowledgement
+## Ethics and AI safety
 
 ::: {.callout-important}
-
-##
+## Generative AI acknowledgement
 
 I used AI in the following ways:
 
 (i) generate definitions and suggested explanations for key concepts covered in this lecture. I used Claude AI to suggest definitions for terms like 'Generative AI', and 'System Prompt', and to generate lists of "top LLM providers in 2025" and "ways of interacting with LLMs".
-
 :::
+
 
 ## Key takeaways
 
@@ -658,14 +775,16 @@ When using LLMs for preparing data, think about:
 ## What we've learnt...
 
 ::: {.columns}
-::: {.column}
+::: {.column width=35%}
+![](images/illustrations/wcd-guest-lecture/LLM-to-helpers_narrow.png){fig-align="centre" height=550px}
+:::
+::: {.column width=65%}
+::: {.incremental}
 - basics of what LLMs can do, who provides them and what differentiates them
 - different 'wild caught data' tasks that LLMs can be used for
 - how to approach verifying LLM output for data preparation tasks
 - how to interact with LLMs from R using {ellmer}
 :::
-::: {.column}
-![](images/illustrations/wcd-guest-lecture/LLM-to-helpers_narrow.png){fig-align="centre" height=550px}
 :::
 :::
 

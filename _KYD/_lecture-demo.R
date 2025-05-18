@@ -47,3 +47,11 @@ author_df |>
           session_librarian$clone()$extract_data(author_name,
                                                   type = type_string(short_prompt))
     )
+
+## ---- missing data ---
+
+author_df_llm |> readr::write_csv('example_data/week11-author_df_llm.csv')
+
+missing_nat <- author_df |> 
+  dplyr::mutate(nationality = na_if(nationality, "No nationality matched")) |> 
+  dplyr::filter(is.na(nationality))

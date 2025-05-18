@@ -2,20 +2,16 @@ library(ellmer)
 
 # ---- session-are-chat ---
 
-## A session is like a chat conversation
 session <- chat_openai()
 
 question <- "
   How can I pick a random letter from A-Z.
 "
 
-## send a question to the 'chat'
 session$chat(question)
 
-## clarify your request
 session$chat("Return R code only")
 
-## inspect all turns in the session so far
 session
 
 # --- add-system-prompt ---
@@ -56,14 +52,26 @@ short_prompt <- "Nationality of person only"
 
 session_lib <- chat_openai(system_prompt = "You are a librarian with expert knowledge of popular authors.")
 
-author_df |>
-  tail(6) |>
+author_df_llm <- author_df |>
   rowwise() |>
-  mutate(nationality_librarian = 
+  mutate(nationality_llm = 
           session_lib$clone()$extract_data(author_name,
                                                   type = type_string(short_prompt))
     )
 
+author_df_llm <- author_df_llm |>
+  rename(nationality_llm = "nationality_librarian")
+
+## -- saved on 2025-05-18 from gpt-4o response --
+
+# author_df_llm |>
+#   readr::write_csv('example_data/week11-author_df_llm.csv')
+
+# author_df_llm |>
+#   dplyr::mutate(nationality = na_if(nationality, "No nationality matched")) |>
+#   readr::write_csv('example_data/week11-author_df_llm_na-if.csv')
+
 ## --- age-guess ---
 
-session$chat("How old is Kate Saunders? Return only the age.")
+session <- chat_openai()
+session$chat("List the instructors of Monash University's wild caught data course.")

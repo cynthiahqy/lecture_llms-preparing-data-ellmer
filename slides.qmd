@@ -1,12 +1,16 @@
 ---
 title: LLMs for Preparing Data in R
+subtitle: "Guest lecture for ETC5512: Wild Caught Data"
 author: Cynthia A. Huang
 date: today
 bibliography: references.bib
+code-copy: true
 ## toc: true
 format:
   presentation-revealjs+letterbox:
     slide-number: true
+filters:
+  - include-code-files
 ---
 
 ```{r}

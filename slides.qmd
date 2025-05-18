@@ -462,44 +462,6 @@ There are multiple ways to verify outcomes match expectations.
 :::
 :::
 
-## 'External Knowledge' in LLMs
-
-LLMs are trained on 'wild caught data' -- lots and lots of it.
-
-::: {.incremental}
-
-- How do you think the data that LLMs are trained on affects their performance?
-- Would you expect a model trained on data from Google platforms (e.g., Gmail, Youtube) to be good at coding?
-
-:::
-
-[Let's look at example data generation task.]{.fragment}
-
-## Looking up missing information
-
-<!-- Let's say we are interested in who teaches different subjects at Monash University. -->
-
-<!-- **[Prompt 1, ChatGPT (18/05/2025)](https://chatgpt.com/share/6828ce73-7d4c-8000-b0b6-ffb5978e9082):** Who are the instructors of Monash University's wild caught data course? [chatGPT](https://chatgpt.com/share/6828ce73-7d4c-8000-b0b6-ffb5978e9082) -->
-
-
-> Prompt: `Write a yaml dataset of the instructors of Monash University's wild caught data course`
-
-- [**Claude Haiku (18/05/2025)**](https://claude.ai/share/0265b829-2808-4508-804d-69f96df86698)
-- [**Claude Sonnet 3.7 (18/05/2025)**](https://claude.ai/share/a68bd764-8581-44fd-a105-58acf8fa1356)
-- [**ChatGPT (18/05/2025)**](https://chatgpt.com/share/68283dc2-a164-8000-9587-40ebd232545e)
-
-What do we expect the LLM output to be? Do we have a reference information to compare against?
-
-## LLM Tool Usage
-
-::: {layout-ncol="2"}
-
-![](assets/claude-tool-settings.png)
-
-![](assets/chatgpt-tool-use.png)
-
-:::
-
 # Using LLMs in R with {ellmer}
 
 <!---image: web interface vs. API -->
@@ -544,7 +506,7 @@ chat <- chat_claude()
 ```r
 prompt <- "Write a yaml dataset of the instructors of Monash University's wild caught data course"
 
-chat$livechat()
+chat$chat()
 ```
 
 <!-- ## Why bother with programmatic interface?
@@ -588,8 +550,8 @@ Example from [ellmer docs](https://ellmer.tidyverse.org/articles/prompt-design.h
 author_df <- readr::read_csv('example_data/week10-author_df.csv')
 
 missing_nat <- author_df |> 
-  dplyr::mutate(nationality = na_if(nationality, "No nationality matched")) |> 
-  dplyr::filter(is.na(nationality))
+  dplyr::mutate(nationality = na_if(nationality, "No nationality matched"))# |> 
+  #dplyr::filter(is.na(nationality))
 
 missing_nat
 
@@ -608,6 +570,17 @@ Another way to verify is via **consensus**.
 In the author nationality example, we could compare nationality responses from different models.
 
 Would you trust the data more if you got all the same answers? or all different answers?
+
+
+## LLM Agents
+
+::: {layout-ncol="2"}
+
+![](assets/claude-tool-settings.png)
+
+![](assets/chatgpt-tool-use.png)
+
+:::
 
 <!--- try in Tutorial -->
 

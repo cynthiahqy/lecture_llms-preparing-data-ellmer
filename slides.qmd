@@ -189,8 +189,9 @@ LLM providers offer paid and free access to multiple models:
 
 Learn more about picking the right tool:
 
-- [📖 OpenAI Model Selection Guide](https://cookbook.openai.com/examples/partners/model_selection_guide/model_selection_guide)
 - [🎙️ Beyond ChatGPT: THE RAPIDLY EVOLVING LANDSCAPE OF AI](https://www.therandomsample.com.au/podcast/beyond-chatgpt-ai-landscape/)
+- [💡 Suggestions on provider/model choice in 'ellmer' docs](https://ellmer.tidyverse.org/index.html#providermodel-choice)
+- [📖 OpenAI Model Selection Guide](https://cookbook.openai.com/examples/partners/model_selection_guide/model_selection_guide)
 - [📖 Anthropic Claude Model Comparison Table](https://docs.anthropic.com/en/docs/about-claude/models/overview#model-comparison-table)
 
 
@@ -412,10 +413,31 @@ How could we use LLMs for each task? -->
 
 - **'look up' facts:** "What nationality is _the author_ `<author name>`?"
 - **suggesting values:** "What is the likely volume unit _of a beverage `<can>` of with_ a volume of `<300>`?"
-- **harmonise different abbreviations:** "Convert the following list of Australian states to all use three-letter state codes: `<list>`" <!-- [example chat](https://chatgpt.com/share/6828bf20-3600-8000-b26d-830a9fde7728) -->
+- **harmonise different abbreviations:** "Convert the following list of Australian states to all use three-letter state codes: `<list>`" <!-- -->
 - **comparison:** "How similar are these two occupations: `<occupation A>`, `<occupation B>`?"
 - **summary:** "Summarise the following survey response: `<text>`"
 - **extraction**: "What movie is the follow review about": `<review text>`
+
+## Requesting different output formats
+
+::: incremental
+- LLM can respond in many different 'text' formats.
+- Some are more useful than others.
+:::
+
+::: {.fragment}
+Let's look at an [example conversation with ChatGPT](https://chatgpt.com/share/6828bf20-3600-8000-b26d-830a9fde7728) for the following prompt
+
+```
+Convert the following list of Australian states to all use three-letter state codes (e.g. VIC, TAS):
+- Victoria
+- NSW
+- N.T.
+- ACT
+- Queensland
+```
+:::
+
 
 ## Verifying success
 
@@ -447,7 +469,7 @@ But 'how' to verify an LLM output is not always clear.
 
 <!--- principle agent problem; management theory--> 
 
-## Back to washing the dishes
+## Approaches to verification
 
 ::: {.columns}
 ::: {.column}
@@ -459,6 +481,23 @@ There are multiple ways to verify outcomes match expectations.
 * **Negative verification:** Figure out signals or signs of 'failure'
 * **Trust-based verification:** Seek assurance and confirmation of 'success'
 :::
+
+:::
+::: {.column .fragment}
+![](images/illustrations/wcd-guest-lecture/dishwasher-04-dirty.png)
+:::
+:::
+
+## Checking on the dishes
+
+::: {.columns}
+::: {.column}
+
+There are multiple ways to verify outcomes match expectations.
+
+* **Positive verification:** [Are the dishes clean?]{.fragment}
+* **Negative verification:** [Is there any dirt on the dishes?]{.fragment}
+* **Trust-based verification:** [Ask the machine if the dishes are clean...?]{.fragment}
 
 :::
 ::: {.column}
@@ -474,13 +513,15 @@ There are multiple ways to verify outcomes match expectations.
 
 Different interfaces mean different data preparation workflows:
 
+::: {.incremental}
 - LLM web-interface = copy/paste
 - programmatic interfaces = code and variables
+:::
 
-::: incremental:::
 
 Using the {ellmer} R package we can:
 
+::: {.incremental}
 - send prompts to that LLM from an R session
 - construct prompts from with imported data
 - systematically docutest different prompts BEFORE scaling up
@@ -489,37 +530,34 @@ Using the {ellmer} R package we can:
 
 ## Setting up {ellmer}
 
-Requirements:
+::: {.columns}
+::: {.column}
+Start by:
 
-- Get an API key from the LLM provider you want to use
+- Installing [`{ellmer}`](https://ellmer.tidyverse.org/)
+
+- Getting an API key from the LLM provider you want to use
   
   > knock! knock! who's there? Cynthia's R session!
 
-- install ellmer
+- Storing the API key where ellmer can find it
 
-- store the API key where ellmer can find it
+:::
+::: {.column}
+Then start chatting:
 
 ```r
 library(ellmer)
 
-chat <- chat_claude()
+session <- chat_openai()
 ```
 
-## Chatting via ellmer
+[A **session** is a single conversation instance between a user and an LLM.]{.fragment}
 
-```r
-prompt <- "Write a yaml dataset of the instructors of Monash University's wild caught data course"
+:::
+:::
 
-chat$chat()
-```
-
-<!-- ## Why bother with programmatic interface?
-
-- scale
-- reproducibility
-- build your own chatbot -->
-
-## Modifying the system prompt
+## System Prompts
 
 ::: {.columns}
 ::: {.column}
@@ -530,21 +568,10 @@ A **system prompt** is the behind-the-scenes instruction manual that tells an AI
 - and how to handle different types of questions or requests
 :::
 ::: {.column}
-```r
-question <- "
-  How can I compute the mean and median of
-   variables a, b, c, and so on,
-   all the way up to z, 
-   grouped by age and sex.
-"
-chat <- chat_claude(system_prompt = "
-  You are an expert R programmer
-  who prefers the tidyverse.
-")
-chat$chat(question)
-```
 
-Example from [ellmer docs](https://ellmer.tidyverse.org/articles/prompt-design.html)
+```{.r include="lecture_ellmer-demo.R"}
+```
+Example adapted from [ellmer docs](https://ellmer.tidyverse.org/articles/prompt-design.html)
 :::
 :::
 

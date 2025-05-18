@@ -116,6 +116,20 @@ Example 3:
 - Tool calling and modularisation
 - Structured output modes
 
+## Chatting via ellmer
+
+```r
+prompt <- "Write a yaml dataset of the instructors of Monash University's wild caught data course"
+
+chat$chat()
+```
+
+<!-- ## Why bother with programmatic interface?
+
+- scale
+- reproducibility
+- build your own chatbot -->
+
 # Tasks
 
 ## Evaluating prompts along with output

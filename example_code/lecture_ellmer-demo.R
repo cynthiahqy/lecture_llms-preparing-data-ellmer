@@ -59,9 +59,6 @@ author_df_llm <- author_df |>
                                                   type = type_string(short_prompt))
     )
 
-author_df_llm <- author_df_llm |>
-  rename(nationality_llm = "nationality_librarian")
-
 ## -- saved on 2025-05-18 from gpt-4o response --
 
 # author_df_llm |>

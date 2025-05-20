@@ -30,13 +30,17 @@ session_tidy_expert
 
 text <- "Jane Austen (/ˈɒstɪn, ˈɔːstɪn/ OST-in, AW-stin; 16 December 1775 – 18 July 1817) was an English novelist known primarily for her six novels, which implicitly interpret, critique, and comment on the English landed gentry at the end of the 18th century. Austen's plots often explore the dependence of women on marriage for the pursuit of favourable social standing and economic security. Her works are implicit critiques of the novels of sensibility of the second half of the 18th century and are part of the transition to 19th-century literary realism.[2][b] Her use of social commentary, realism, wit, and irony have earned her acclaim amongst critics and scholars.\n"
 
-session_read <- chat_openai(system_prompt = "You are a data entry assistant.")
+session <- chat_openai()
 
-session_read <- chat_openai()
+session_read <- chat_openai(system_prompt = "You are a data entry assistant.")
 
 nationality_prompt <- "Nationality of person"
 
 session_read$extract_data(text, type = type_string(description = nationality_prompt))
+
+session <- chat_openai()
+
+session$extract_data(text, type = type_string(description = nationality_prompt))
 
 std_prompt <- "Extract structured data of the nationality of person. Return only ISO 3-digit country code (e.g. GBR, USA)"
 
@@ -53,20 +57,12 @@ short_prompt <- "Nationality of person only"
 session_lib <- chat_openai(system_prompt = "You are a librarian with expert knowledge of popular authors.")
 
 author_df_llm <- author_df |>
+  tail(6) |>
   rowwise() |>
   mutate(nationality_llm = 
           session_lib$clone()$extract_data(author_name,
                                                   type = type_string(short_prompt))
     )
-
-## -- saved on 2025-05-18 from gpt-4o response --
-
-# author_df_llm |>
-#   readr::write_csv('example_data/week11-author_df_llm.csv')
-
-# author_df_llm |>
-#   dplyr::mutate(nationality = na_if(nationality, "No nationality matched")) |>
-#   readr::write_csv('example_data/week11-author_df_llm_na-if.csv')
 
 ## --- age-guess ---
 

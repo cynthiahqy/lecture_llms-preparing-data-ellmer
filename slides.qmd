@@ -38,14 +38,6 @@ library(dplyr)
 * See how to interact with LLMs from within R using the ellmer package
 ::: -->
 
-## Learning goals
-
-- develop your understanding of:
-    - what LLMs are,
-    - different types of "wild caught data" tasks that LLMs can help with,
-    - how to use and check LLMs for specific data prepration tasks,
-    - how to interact with LLMs in R using {ellmer}
-
 ## Lecture outline
 
 ::: {.columns}
@@ -60,7 +52,20 @@ library(dplyr)
 :::
 :::
 
+## Learning goals
 
+::: {.columns}
+::: {.column width=35%}
+![](images/illustrations/wcd-guest-lecture/openAI-anthropic-models.png){height=500px}
+:::
+::: {.column width=65%}
+- develop your understanding of:
+    - what LLMs are,
+    - different types of "wild caught data" tasks that LLMs can help with,
+    - how to use and check LLMs for specific data prepration tasks,
+    - how to interact with LLMs in R using {ellmer}
+:::
+:::
 
 # About Me!
 
@@ -97,6 +102,7 @@ library(dplyr)
 
 ::: {.columns}
 ::: {.column}
+<!-- definitions generated with help from Claude AI -->
 *Generative AI* refers to:
 
 - computer algorithms and systems
@@ -132,21 +138,13 @@ We often understand tools by what they can do for us, not how they work.
 :::
 :::
 
-<!-- LLMs are...
-
-::: incremental
-- code writers?
-- encyclopedias?
-- assignment help?
-- translators? -->
-
 ## Who makes LLMs?
 
 **LLM providers** develop and offer access to large language models and systems
 
 ![](assets/llm-providers-googlesearch.png)
 
-[Today, we will see demos of _Anthropic_ and _OpenAI_ models.]{.fragment}
+[Today, we will see demos of _OpenAI_ models.]{.fragment}
 
 ## Why are there so many different models?
 
@@ -173,11 +171,6 @@ LLM providers offer paid and free access to multiple models:
 - specific domains: medicine, finance, legal
 
 :::
-
-
-<!-- Multiple models and capabilities can be used together
-
-![](assets/openAI-cookbook.png) -->
 
 :::
 :::
@@ -229,8 +222,6 @@ Learn more about picking the right tool:
 
 ## How can we interact with LLMs?
 
-<!--- TODO: re-export image -->
-
 ::: {.columns}
 ::: {.column width="35%"}
 ![](images/illustrations/wcd-guest-lecture/openAI-anthropic-models.png)
@@ -242,8 +233,6 @@ Learn more about picking the right tool:
 - mobile (chat) applications
 - voice assistants
 - embedded LLMs (e.g. suggestions in Gmail)
-
-<!-- [Today, we will use web-based chat via [chatgpt.com](https://chatgpt.com) and [claude.ai](https://claude.ai/), as well as programmatic access via [`{ellmer}`](https://ellmer.tidyverse.org)]{.fragment} -->
 
 :::
 :::
@@ -264,7 +253,7 @@ Learn more about picking the right tool:
 Today, we will use web-based chat via:
 
 - [chatgpt.com](https://chatgpt.com)
-- [claude.ai](https://claude.ai/), 
+<!-- - [claude.ai](https://claude.ai/),  -->
 
 as well as programmatic access via: 
 
@@ -522,7 +511,7 @@ Using the {ellmer} R package we can:
 ::: {.incremental}
 - send prompts to that LLM from an R session
 - construct prompts from with imported data
-- systematically docutest different prompts BEFORE scaling up
+- systematically test different prompts BEFORE scaling up
 - manipulate response content using code
 :::
 
@@ -534,7 +523,7 @@ The basic steps:
 
 - Installing [`{ellmer}`](https://ellmer.tidyverse.org/)
 - Getting an API key from the LLM provider you want to use
-  > knock! knock! who's there? Cynthia's R session!
+  - _knock! knock! who's there? Cynthia's R session!_
 - Storing the API key where ellmer can find it
 - Starting a chat session using the relevant `ellmer::chat_*()`
 :::
@@ -678,7 +667,7 @@ Another way to verify data quality is via **consensus**.
 Here are nationalities returned by OpenAI's gpt-4o model on 18/05/2025:
 
 ```{r}
-readr::read_csv("example_data/week11-author_df_llm_na-if.csv") |> filter(nationality_llm != nationality) |> select(-author_links) |> head(6)
+readr::read_csv("example_data/week11-author_df_llm.csv") |> tail(6)
 ```
 :::
 
@@ -704,7 +693,7 @@ Let's try again via the [ChatGPT web interface](https://chatgpt.com)
 :::
 
 ::: {.fragment}
-Why do you think ChatGPT able to answer this request via the web interface in this [demo chat?](https://chatgpt.com/share/6829d5e8-ec84-8000-843e-b51aa14cca3d)
+Why do you think ChatGPT was able to answer this request via the web interface in this [demo chat?](https://chatgpt.com/share/6829d5e8-ec84-8000-843e-b51aa14cca3d)
 :::
 
 
